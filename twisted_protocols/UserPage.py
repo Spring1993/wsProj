@@ -245,8 +245,17 @@ class UserPage(Resource):
             return NOT_DONE_YET
         
         elif request.args['action'] == ['checkemail']:
-            d = checkEmailSql(wsdbpool, request.args['username'][0], request.args['hc'][0]).addCallback(self.onCheckEmail, request)
-            return NOT_DONE_YET
+		if (request.args.has_key('lang') is False) or (request.args['lang'] == ['cn']):
+			d = checkEmailSql(wsdbpool, request.args['username'][0], request.args['hc'][0]).addCallback(self.onCheckEmail, request)
+            		return NOT_DONE_YET
+
+		elif request.args['lang'] == ['en']:
+			d = checkEmailSql(wsdbpool, request.args['username'][0], request.args['hc'][0]).addCallback(self.onCheckEmailen, request)
+			return NOT_DONE_YET
+
+		elif request.args['lang'] == ['tw']:
+			d = checkEmailSql(wsdbpool, request.args['username'][0], request.args['hc'][0]).addCallback(self.onCheckEmailtw, request)
+			return NOT_DONE_YET
 
     def onCheckEmail(self, result, request):
 	f1 = open("./twisted_protocols/correct.html",'r')
@@ -276,7 +285,61 @@ class UserPage(Resource):
         request.finish()
 
 
+	def onCheckEmailen(self, result, request):
+	f1 = open("./twisted_protocols/correcten.html",'r')
+	all_the_html_correct = f1.read()
+	f1.close()
+
+	f2 = open("./twisted_protocols/invalid602en.htnl","r")
+	all_the_html_invalid602 = f2.read()
+	f2.close()
+
+	f3 = open("./twisted_protocols/invalid604en.html","r")
+	all_the_html_invalid604 = f3.read()
+	f3.close()
+
+	f4 = open("./twisted_protocols/invalid401en.html","r")
+	all_the_html_invalid401 = f4.read()
+	f4.close()
+
+        if result == 602:
+            request.write(all_the_html_invalid602)
+        elif result == 604:
+            request.write(all_the_html_invalid604)
+        elif result == 401:
+            request.write(all_the_html_invalid401)
+        else:
+            request.write(all_the_html_correct )
+        request.finish()
         
+
+	def onCheckEmailtw(self, result, request):
+	f1 = open("./twisted_protocols/correcttw.html",'r')
+	all_the_html_correct = f1.read()
+	f1.close()
+
+	f2 = open("./twisted_protocols/invalid602tw.htnl","r")
+	all_the_html_invalid602 = f2.read()
+	f2.close()
+
+	f3 = open("./twisted_protocols/invalid604tw.html","r")
+	all_the_html_invalid604 = f3.read()
+	f3.close()
+
+	f4 = open("./twisted_protocols/invalid401tw.html","r")
+	all_the_html_invalid401 = f4.read()
+	f4.close()
+
+        if result == 602:
+            request.write(all_the_html_invalid602)
+        elif result == 604:
+            request.write(all_the_html_invalid604)
+        elif result == 401:
+            request.write(all_the_html_invalid401)
+        else:
+            request.write(all_the_html_correct )
+        request.finish()
+
 
         
 
