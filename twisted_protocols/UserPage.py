@@ -262,7 +262,7 @@ class UserPage(Resource):
 	all_the_html_correct = f1.read()
 	f1.close()
 
-	f2 = open("./twisted_protocols/invalid602.htnl","r")
+	f2 = open("./twisted_protocols/invalid602.html","r")
 	all_the_html_invalid602 = f2.read()
 	f2.close()
 

@@ -17,11 +17,18 @@ def getLocationByBsinfo(mcc, mnc, imei, imsi, lac, cid, signal, timestamp):
     paramsDict['bts'] = ','.join((str(mcc), str(mnc), str(lac), str(cid), str(signal)))
     params = urllib.urlencode(paramsDict)
     request.add_data(params)
-    locations = urllib2.urlopen(request).read()
-    locations = eval(locations)['result']['location'].split(',')
-    result = gcj2wgs_exact(float(locations[1]), float(locations[0]))
-    return str(result[1])+','+str(result[0])
+    for i in range(3):
+        try:
+            locations = urllib2.urlopen(request).read()
+            locations = eval(locations)['result']['location'].split(',')
+            result = gcj2wgs_exact(float(locations[1]), float(locations[0]))
+            latlog = str(result[1])+','+str(result[0])
+        except Exception as e:
+            latlog = '0,0'
+        else:
+            break
+    return latlog
 
 if __name__ == '__main__':
-    print getLocationByBsinfo(460, 00, 868986022055835,460002606774197,9365 ,5013,-93,20151218074832)
+    print getLocationByBsinfo(460, 00, 868986022055835,460002606774197,93659,5013,-93,20151218074832)
 

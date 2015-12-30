@@ -53,8 +53,14 @@ def insertLocation(wsdbpool, message):
         return threads.deferToThread(getLocationByBsinfo, mcc, mnc, imei, imsi, lac, cid, signal, timestamp)
 
     def _insertLocation(gpsinfo, wsdbpool, imei, timestamp):
-        gpsinfo = str(gpsinfo).split(',')
-        return insertLocationSql(wsdbpool, imei, gpsinfo[0], gpsinfo[1], timestamp, 'b')
+        if gpsinfo != '0,0':
+            gpsinfo = str(gpsinfo).split(',')
+            return insertLocationSql(wsdbpool, imei, gpsinfo[0], gpsinfo[1], timestamp, 'b')
+        else:
+            d = defer.Deferred()
+            d.callback(None)
+            return d
+
 
     message = message.split(',')
     imei = str(message[1]).strip()

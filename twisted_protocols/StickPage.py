@@ -43,7 +43,7 @@ class StickPage(Resource):
             request.write(resultValue(505))
         else:
             result = result[0]
-            request.write(dumps({'imei': str(result[0]), 'level': str(int(result[1])), 'charging': str(result[2]), 'timestamp': str(result[3])}))
+            request.write(dumps({'result': '1', 'imei': str(result[0]), 'level': str(int(result[1])), 'charging': str(result[2]), 'timestamp': str(result[3])}))
         request.finish()
 
     def render_POST(self, request):
